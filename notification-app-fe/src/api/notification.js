@@ -1,18 +1,22 @@
 import axios from 'axios'
-import { createLog } from './utils/logger'
+import { createLog } from '../utils/logger'
 
-const API_BASE_URL = 'http://4.224.186.213/evaluation-service'
+const API_BASE_URL = ''
 const ACCESS_TOKEN = import.meta.env.VITE_ACCESS_TOKEN
 
 export function fetchNotifications(params = {}) {
+  console.log('Fetching notifications with params:', params)
+  console.log('Using token:', ACCESS_TOKEN ? 'Token exists' : 'Token missing')
+  
   return axios
-    .get(`${API_BASE_URL}/notifications`, {
+    .get(`/evaluation-service/notifications`, {
       params,
       headers: {
         'Authorization': `Bearer ${ACCESS_TOKEN}`,
       },
     })
     .then(response => {
+      console.log('Response received:', response.data)
       createLog(
         'frontend',
         'info',
@@ -22,6 +26,10 @@ export function fetchNotifications(params = {}) {
       return response.data
     })
     .catch(error => {
+      console.error('Full error:', error)
+      console.error('Error response:', error.response)
+      console.error('Error message:', error.message)
+      
       createLog(
         'frontend',
         'error',
